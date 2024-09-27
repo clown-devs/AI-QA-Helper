@@ -1,0 +1,23 @@
+version: '3.9'
+
+services:
+ fastapi:
+   restart: "no"
+   hostname: api
+   container_name: api
+   build:
+     dockerfile: server/Dockerfile
+   command: sh -c "python main.py"
+   volumes:
+     - ./:/AI-Hackaton
+   ports:
+     - '85:8000'
+
+  bot_ai:
+    restart: "no"
+    build:
+      dockerfile: bot/Dockerfile
+    command: sh -c "python bot/telegram_bot.py"
+    container_name: bot_ai
+    volumes:
+      - ./:/TG_bot
