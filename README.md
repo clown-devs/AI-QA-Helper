@@ -2,6 +2,14 @@
 TODO: оформить документацию
 Бот, созданный в рамках хакатона, нужен для *БЛА-БЛА-БЛА*
 
+## Docker
+
+#### Установка и запуск контейнеров
+```bash
+git clone https://github.com/clown-devs/AI-QA-Helper.git
+cd AI-QA-Helper
+docker compose up -d
+```
 
 ## Backend
 
