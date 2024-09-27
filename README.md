@@ -6,7 +6,7 @@ TODO: оформить документацию
 ## Backend
 
 #### Установка зависимостей
-> pip install pandas openpyxl sentence-transformers fastapi uvicorn
+> pip install -r requirements.txt
 
 #### Запуск сервера
 > python main.py
