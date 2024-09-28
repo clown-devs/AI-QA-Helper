@@ -8,13 +8,20 @@ git clone https://github.com/clown-devs/AI-QA-Helper.git
 ```
 
 ## HTTPS
-Frontend использует защищенное соединение https, создайте сертификат letsencrypt:
+Frontend использует защищенное соединение https, если вы не хотите использовать шифрование, измените файл **./frontend/nginx.conf**, иначе создайте сертификат letsencrypt.
+
+Если у вас уже работает nginx на 80 порту, отключите его на время получения сертификата:
+> sudo systemctl stop nginx
+
 ```bash
 sudo apt install certbot python3-certbot-nginx
-sudo certbot certonly --nginx -d <yourdomain.com>
+sudo certbot certonly --standalone -d <yourdomain.com>
 ```
 
-Переместите созданные ключи в директорию *frontend* и поменяйте права доступа:
+Включите nginx, если необходимо:
+> sudo systemctl start nginx
+
+Переместите созданные ключи в директорию *frontend* и измените права доступа:
 ```bash
 sudo mv /etc/letsencrypt/live/<yourdomain.com>/fullchain.pem ~/AI-QA-Helper/frontend/
 sudo mv /etc/letsencrypt/live/<yourdomain.com>/privkey.pem ~/AI-QA-Helper/frontend/
