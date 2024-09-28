@@ -7,7 +7,7 @@ from langchain_core.runnables import RunnablePassthrough
 from db.embedding import HFEmbeddingFunction
 from langchain_core.output_parsers import StrOutputParser
 
-model_name_llm = "microsoft/Phi-3.5-mini-instruct"
+model_name_llm = "/AI-QA-Helper/ai/ai_model/"
 
 def load_model():
     model = AutoModelForCausalLM.from_pretrained(
@@ -57,13 +57,18 @@ class CustomRetriever(BaseRetriever):
 def create_chain(model, collection):
     prompt = ChatPromptTemplate.from_messages(
         [
-            ('system', """Ты — интелектуальный помощник оператора службы поддержки Rutube, который отвечает на вопросы о поддержке. 
-            Для ответа на вопрос ты должен использовать только информацию из контекста.
-            Отвечай НА РУССКОМ ЯЗЫКЕ.
+            ('system', """Ты — интелектуальный помощник оператора службы поддержки RUTUBE, который отвечает на вопросы о поддержке. 
+            RUTUBE - это российский онлайн-сервис для хостинга и просмотра видео.
+            ТЫ ДОЛЖЕН ОТВЕЧАТЬ ТОЛЬКО на вопросы связанные с поддержкой платформой RUTUBE.
+            Для ответа на вопрос использовать только информацию из контекста.
+            На вопросы не связанные с платформой ты должен ответить только: Данный вопрос не связан с платформой RuTube.
+            
+            Отвечай НА РУССКОМ ЯЗЫКЕ. 
             Контекст: {context} """),
             ('user', "Вопрос: {question}")
         ]
     )
+
     retriever = CustomRetriever(collection)
     # Извлечение контекста
     context = retriever | RunnablePassthrough()
