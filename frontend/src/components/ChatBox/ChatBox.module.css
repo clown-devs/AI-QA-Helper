@@ -1,0 +1,46 @@
+.chatBoxContainer {
+  width: 300px; /* Ширина бокового чата */
+  background-color: #ffffff; /* Цвет фона для бокового чата */
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.messages {
+  max-height: 300px; /* Максимальная высота для прокрутки */
+  overflow-y: auto; /* Прокрутка по вертикали */
+  margin-bottom: 10px;
+}
+
+.message {
+  padding: 8px;
+  background-color: #e0e0e0; /* Цвет фона для сообщений */
+  border-radius: 4px;
+  margin-bottom: 5px;
+}
+
+.inputContainer {
+  display: flex;
+}
+
+.input {
+  flex-grow: 1;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-right: 10px;
+}
+
+.sendButton {
+  padding: 10px 15px;
+  background-color: #4CAF50; /* Цвет кнопки */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.sendButton:hover {
+  background-color: #45a049; /* Цвет при наведении */
+}
