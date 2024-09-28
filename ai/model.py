@@ -46,13 +46,15 @@ def get_collection():
 
 from langchain.schema import BaseRetriever, Document
 class CustomRetriever(BaseRetriever):
+    collection: chromadb.Collection
+    def __init__(self, collection):
+        super().__init__(collection=collection)
     def _get_relevant_documents(self, query: str):
-        results = collection.query(query_texts=[query], n_results=3)  # Пример вызова к источнику данных\
+        results = self.collection.query(query_texts=[query], n_results=3)  # Пример вызова к источнику данных\
         documents = [Document(page_content=result) for result in results['documents'][0]]
         return documents
 
-
-def create_chain( model):
+def create_chain(model, collection):
     prompt = ChatPromptTemplate.from_messages(
         [
             ('system', """Ты — интелектуальный помощник оператора службы поддержки Rutube, который отвечает на вопросы о поддержке. 
@@ -62,7 +64,7 @@ def create_chain( model):
             ('user', "Вопрос: {question}")
         ]
     )
-    retriever = CustomRetriever()
+    retriever = CustomRetriever(collection)
     # Извлечение контекста
     context = retriever | RunnablePassthrough()
 
@@ -76,9 +78,16 @@ def create_chain( model):
 
 def invoke_model(chain, query):
     response = chain.invoke(query)
-    print(response)
+    return response
 
-chat_model = load_model()
-collection = get_collection()
-chain = create_chain(chat_model)
-invoke_model(chain, "Могу ли я загружать видео в формате MP4, если да то какого размера??")
+class Model():
+    def __init__(self):
+        self.chat_model = load_model()
+        self.collection = get_collection()
+        self.chain = create_chain(self.chat_model, self.collection)
+
+    def get_answer(self, question: str) -> str:
+        return invoke_model(self.chain, question)
+
+
+

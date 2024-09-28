@@ -9,7 +9,7 @@ async def echo(message: types.Message, **kwargs):
 
 async def api_predict(message: types.message, **kwargs):
     data_json = {"question": f"{message.text}"}
-    resp = requests.post(f"http://{api}/predict", json=data_json, timeout=(5, 15))
+    resp = requests.post(f"http://{api}/predict", json=data_json)
     answer_json = resp.json()
     
     await message.reply(f"{answer_json['answer']}")
