@@ -18,8 +18,8 @@ sudo certbot certonly --nginx -d <yourdomain.com>
 ```bash
 sudo mv /etc/letsencrypt/live/<yourdomain.com>/fullchain.pem ~/AI-QA-Helper/frontend/
 sudo mv /etc/letsencrypt/live/<yourdomain.com>/privkey.pem ~/AI-QA-Helper/frontend/
-sudo chmod o+x ~/AI-QA-Helper/frontend/fullchain.pem
-sudo chmod o+x ~/AI-QA-Helper/frontend/privkey.pem
+sudo chmod o+rx ~/AI-QA-Helper/frontend/fullchain.pem
+sudo chmod o+rx ~/AI-QA-Helper/frontend/privkey.pem
 ```
 
 ## Docker
