@@ -13,11 +13,11 @@ services:
    ports:
      - '85:8000'
 
-  # bot_ai:
-  #   restart: "no"
-  #   build:
-  #     dockerfile: bot/Dockerfile
-  #   command: sh -c "python bot/telegram_bot.py"
-  #   container_name: bot_ai
-  #   volumes:
-  #     - ./:/TG_bot
+ bot_ai:
+   restart: "no"
+   build:
+     dockerfile: bot/Dockerfile
+   command: sh -c "python bot/telegram_bot.py"
+   container_name: bot_ai
+   volumes:
+     - ./:/TG_bot
