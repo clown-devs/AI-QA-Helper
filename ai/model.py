@@ -7,7 +7,7 @@ from langchain_core.runnables import RunnablePassthrough
 from db.embedding import HFEmbeddingFunction
 from langchain_core.output_parsers import StrOutputParser
 
-model_name_llm = "microsoft/Phi-3.5-mini-instruct"
+model_name_llm = "/AI-QA-Helper/ai/ai_model/"
 
 def load_model():
     model = AutoModelForCausalLM.from_pretrained(
