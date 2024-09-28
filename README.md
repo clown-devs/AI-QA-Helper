@@ -2,11 +2,29 @@
 TODO: оформить документацию
 Бот, созданный в рамках хакатона, нужен для *БЛА-БЛА-БЛА*
 
-## Docker
-
-#### Установка и запуск контейнеров
+## Получение репозитория
 ```bash
 git clone https://github.com/clown-devs/AI-QA-Helper.git
+```
+
+## HTTPS
+Frontend использует защищенное соединение https, создайте сертификат letsencrypt:
+```bash
+sudo apt install certbot python3-certbot-nginx
+sudo certbot certonly --nginx -d <yourdomain.com>
+```
+
+Переместите созданные ключи в директорию *frontend* и поменяйте права доступа:
+```bash
+sudo mv /etc/letsencrypt/live/<yourdomain.com>/fullchain.pem ~/AI-QA-Helper/frontend/
+sudo mv /etc/letsencrypt/live/<yourdomain.com>/privkey.pem ~/AI-QA-Helper/frontend/
+sudo chmod o+x ~/AI-QA-Helper/frontend/fullchain.pem
+sudo chmod o+x ~/AI-QA-Helper/frontend/privkey.pem
+```
+
+## Docker
+#### Запуск всех контейнеров
+```bash
 cd AI-QA-Helper
 docker compose up -d
 ```
