@@ -1,7 +1,13 @@
-FROM python:3.11-alpine
-ENV PYTHONUNBUFFERED 1
-ENV PYTHONDONTWRITEBYTECODE 1
+FROM node:18-alpine AS build
 
 WORKDIR /frontend
 
-COPY . .
+COPY frontend/package.json frontend/package-lock.json ./
+RUN npm install
+COPY ./frontend .
+RUN npm run build
+FROM nginx:alpine AS production
+COPY --from=build /frontend/dist /usr/share/nginx/html
+
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
