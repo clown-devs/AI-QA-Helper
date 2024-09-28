@@ -14,3 +14,27 @@
   padding: 20px;
   overflow: hidden;
 }
+.container {
+  display: flex;
+  height: 100vh;
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f1f1f1;
+  padding: 20px;
+  overflow: hidden;
+  gap: 100px;
+}
+
+.chatbox {
+  flex: 1;
+  max-width: 80%;
+  margin-right: 20px;
+}
+
+.miniChatbox {
+  width: 300px;
+  min-width: 250px;
+  height: fit-content;
+}

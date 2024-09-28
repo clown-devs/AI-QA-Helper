@@ -1,9 +1,19 @@
 .chatContainer {
+  width: 500px;
+  height: 100%;
+  background-color: #f9f9f9;
+  border: 1px solid #ccc;
+  border-radius: 8px;
   display: flex;
   flex-direction: column;
-  height: 100%;
-  width: 500px;
-  gap: 10px;
+}
+
+.header {
+  background-color: #e7e7e7;
+  padding: 10px;
+  text-align: center;
+  font-weight: bold;
+  border-bottom: 1px solid #ccc;
 }
 
 .messages {
@@ -13,21 +23,22 @@
   overflow-y: auto;
   padding: 10px;
   background-color: #f1f1f1;
-  border: 1px solid #ccc;
-  border-radius: 30px;
-  gap: 10px;
 }
 
 .message {
   margin: 5px 0;
   padding: 8px;
   border-radius: 4px;
-  background-color: #e6e6e6;
-  align-self: flex-start;
+  background-color: #007bff;
+  color: white;
+  word-wrap: break-word;
+  word-break: break-word;
+  overflow-wrap: break-word;
 }
 
 .inputContainer {
   display: flex;
+  padding: 10px;
 }
 
 .input {
@@ -54,4 +65,16 @@
 .messageItem {
   display: flex;
   gap: 10px;
+  align-items: center;
+  align-self: flex-end;
+}
+
+.containerImg {
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 3px solid #e6e6e6;
+  border-radius: 40px;
 }

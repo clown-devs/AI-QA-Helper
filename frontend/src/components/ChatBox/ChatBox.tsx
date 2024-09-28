@@ -1,41 +1,67 @@
 import React, { useState } from 'react';
 import styles from './ChatBox.module.css';
 
-const ChatBox: React.FC = () => {
-  const [input, setInput] = useState<string>('');
-  const [messages, setMessages] = useState<string[]>([]);
+interface Message {
+  text: string;
+  sender: 'user' | 'bot';
+}
 
-  const handleSend = () => {
-    if (input.trim()) {
-      setMessages((prev) => [...prev, input]);
-      setInput('');
+const MiniChat: React.FC = () => {
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [input, setInput] = useState<string>('');
+
+  const sendMessage = async () => {
+    if (!input.trim()) return;
+
+    const userMessage: Message = { text: input, sender: 'user' };
+    setMessages([...messages, userMessage]);
+    setInput('');
+
+    try {
+      const response = await fetch('https://your-api-endpoint.com/chatbot', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ query: input }),
+      });
+      const data = await response.json();
+
+      const botMessage: Message = { text: data.response, sender: 'bot' };
+      setMessages((prevMessages) => [...prevMessages, botMessage]);
+    } catch (error) {
+      console.error('Error sending message:', error);
     }
   };
 
   return (
-    <div className={styles.chatBoxContainer}>
-      <h3>Дополнительный чат</h3>
-      <div className={styles.messages}>
-        {messages.map((msg, index) => (
-          <div key={index} className={styles.message}>
-            {msg}
-          </div>
-        ))}
+    <div className={styles.miniChatbox}>
+      <div className={styles.header}>Интеллектуальный помощник</div>
+      <div className={styles.messagesContainer}>
+        {messages
+          .slice()
+          .reverse()
+          .map((message, index) => (
+            <div
+              key={index}
+              className={`${styles.message} ${
+                message.sender === 'user' ? styles.user : styles.bot
+              }`}
+            >
+              {message.text}
+            </div>
+          ))}
       </div>
       <div className={styles.inputContainer}>
         <input
           type="text"
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          placeholder="Введите сообщение для второго чата..."
-          className={styles.input}
+          placeholder="Type your message..."
+          onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
         />
-        <button onClick={handleSend} className={styles.sendButton}>
-          Отправить
-        </button>
+        <button onClick={sendMessage}>Send</button>
       </div>
     </div>
   );
 };
 
-export default ChatBox;
+export default MiniChat;
