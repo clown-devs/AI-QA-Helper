@@ -6,7 +6,8 @@ services:
     container_name: backend
     hostname: backend
     build:
-      dockerfile: backend/Dockerfile
+      context: backend
+      dockerfile: Dockerfile
     command: sh -c "python backend/main.py"
     volumes:
       - ./:/AI-QA-Helper
@@ -17,8 +18,9 @@ services:
     restart: "no"
     container_name: bot_ai
     build:
-      dockerfile: bot/Dockerfile
-    command: sh -c "python bot/telegram_bot.py"
+      context: ./bot
+      dockerfile: Dockerfile
+    command: sh -c "python telegram_bot.py"
     volumes:
       - ./:/TG_bot
     depends_on:
@@ -29,10 +31,14 @@ services:
     container_name: frontend_ai
     hostname: frontend
     build:
-      dockerfile: frontend/Dockerfile
+      context: ./frontend
+      dockerfile: Dockerfile
     ports:
       - "80:80" 
+      - "443:443"
     environment:
       - NODE_ENV=production 
     depends_on:
       - backend 
+    volumes:
+      - ./frontend/nginx.conf:/etc/nginx/conf.d/default.conf

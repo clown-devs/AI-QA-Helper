@@ -2,12 +2,15 @@ FROM node:18-alpine AS build
 
 WORKDIR /frontend
 
-COPY frontend/package.json frontend/package-lock.json ./
+COPY package.json package-lock.json ./
 RUN npm install
-COPY ./frontend .
+COPY . .
 RUN npm run build
 FROM nginx:alpine AS production
 COPY --from=build /frontend/dist /usr/share/nginx/html
 
-EXPOSE 80
+COPY ./fullchain.pem /etc/ssl/certs/fullchain.pem 
+COPY ./privkey.pem /etc/ssl/private/privkey.pem
+
+EXPOSE 80 443
 CMD ["nginx", "-g", "daemon off;"]
