@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import styles from './ChatBox.module.css';
-
+import axios from 'axios';
 interface Message {
   text: string;
   sender: 'user' | 'bot';
@@ -18,17 +18,15 @@ const MiniChat: React.FC = () => {
     setInput('');
 
     try {
-      const response = await fetch('https://your-api-endpoint.com/chatbot', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ query: input }),
+      const response = await axios.post('http://87.242.119.60:85/predict', {
+        question: input,
       });
-      const data = await response.json();
+      console.log(response);
 
-      const botMessage: Message = { text: data.response, sender: 'bot' };
+      const botMessage: Message = { text: response.data.answer, sender: 'bot' };
       setMessages((prevMessages) => [...prevMessages, botMessage]);
     } catch (error) {
-      console.error('Error sending message:', error);
+      console.error('Error sending message:', error.message || error);
     }
   };
 
@@ -59,6 +57,7 @@ const MiniChat: React.FC = () => {
           onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
         />
         <button onClick={sendMessage}>Send</button>
+        {/* <button onClick={sendMessage}>Отправить </button> */}
       </div>
     </div>
   );
