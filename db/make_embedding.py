@@ -1,6 +1,6 @@
 import chromadb
 from chromadb import Documents, EmbeddingFunction, Embeddings
-
+from embedding import HFEmbedding
 import pandas as pd
 
 # Считываем базу знаний
@@ -42,30 +42,10 @@ def add_docs_to_collection(documents, collection):
     print("Documents added to collection")
 
 
-class MyEmbeddingFunction(EmbeddingFunction):
-    
-    def __init__(self):
-        from langchain_community.embeddings import HuggingFaceEmbeddings
-        # Подключаем эмбеддинг модель
-        model_name = "ai-forever/ru-en-RoSBERTa" # model_name = 'ai-forever/sbert_large_nlu_ru'
-        model_kwargs = {'device': 'cpu'}
-        encode_kwargs = {'normalize_embeddings': False}
-
-        self.hf = HuggingFaceEmbeddings(
-            model_name=model_name,
-            model_kwargs=model_kwargs,
-            encode_kwargs=encode_kwargs
-        )
-    def __call__(self, input: Documents) -> Embeddings:
-        # embed the documents somehow
-        embeddings = self.hf.embed_documents(input)
-        return embeddings
 #---CHROMA---
-
-emedding_func = MyEmbeddingFunction()
-print("DB ping Success")
+emedding_func = HFEmbedding()
 chroma_client = chromadb.HttpClient(host='87.242.119.60', port=8000)
-chroma_client.delete_collection(name="rutube")
+#chroma_client.delete_collection(name="rutube")
 collection = chroma_client.get_or_create_collection(
     name="rutube", 
     embedding_function=emedding_func, 
