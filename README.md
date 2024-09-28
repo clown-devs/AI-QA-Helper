@@ -23,13 +23,35 @@ sudo chmod o+rx ~/AI-QA-Helper/frontend/privkey.pem
 ```
 
 ## Docker
-#### Запуск всех контейнеров
+### Запуск всех контейнеров
 ```bash
 cd AI-QA-Helper
 docker compose up -d
 ```
+### Отдельный запуск
+#### bot
+```bash
+cd AI-QA-Helper/bot
+docker build -t 'bot'
+docker run -d 'bot'
+```
+#### backend
+```bash
+cd AI-QA-Helper/backend
+docker build -t 'backend'
+docker run -d 'backend'
+```
+### frontend
+```bash
+cd AI-QA-Helper/frontend
+docker build -t 'frontend'
+docker run -d 'frontend'
+```
 
-## Backend
+
+## Ручной запуск
+
+### backend
 
 #### Установка зависимостей
 > pip install -r requirements.txt
@@ -37,7 +59,7 @@ docker compose up -d
 #### Запуск сервера
 > python main.py
 
-## Database
+### Database
 
 #### Создание векторизированного датасета
 > python db/main.py
