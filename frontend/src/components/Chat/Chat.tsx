@@ -1,14 +1,29 @@
-import React, { useState } from 'react';
+import { FC } from 'react';
 import styles from './Chat.module.css';
 
-const Chat: React.FC = () => {
-  const [messages, setMessages] = useState<string[]>([]);
-  const [inputValue, setInputValue] = useState<string>('');
+interface Message {
+  text: string;
+  sender: string;
+}
 
+interface ChatProps {
+  messages: Message[];
+  addMessage: (message: Message) => void;
+  inputValue: string;
+  addInputValue: (inputValue: string) => void;
+}
+
+const Chat: FC<ChatProps> = ({
+  messages,
+  addMessage,
+  inputValue,
+  addInputValue,
+}) => {
   const sendMessage = () => {
     if (inputValue.trim()) {
-      setMessages((prevMessages) => [...prevMessages, inputValue]);
-      setInputValue('');
+      const newMessage: Message = { text: inputValue, sender: 'user' };
+      addMessage(newMessage);
+      addInputValue('');
     }
   };
 
@@ -37,7 +52,7 @@ const Chat: React.FC = () => {
                 />
               </div> */}
               <div key={index} className={styles.message}>
-                {message}
+                {message.text}
               </div>
             </div>
           ))}
@@ -46,7 +61,7 @@ const Chat: React.FC = () => {
         <input
           type="text"
           value={inputValue}
-          onChange={(e) => setInputValue(e.target.value)}
+          onChange={(e) => addInputValue(e.target.value)}
           onKeyDown={handleKeyDown}
           placeholder="Type your message..."
           className={styles.input}
