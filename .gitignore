@@ -3,3 +3,5 @@ venv
 data/
 **/.env
 **/__pycache__/
+**/fullchain.pem
+**/privkey.pem
