@@ -1,7 +1,6 @@
 import chromadb
 import pandas as pd
 
-
 # считаем базу Часто задаваемых вопросов RUTUBE 
 faq = pd.read_excel("baseline/rag/01_База_знаний.xlsx")
 faq.head()
