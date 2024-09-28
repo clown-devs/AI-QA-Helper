@@ -6,6 +6,7 @@ from sentence_transformers import SentenceTransformer
 from sentence_transformers.util import cos_sim
 import pandas as pd
 from ai.model import Model 
+from fastapi.middleware.cors import CORSMiddleware
 
 model = Model()
 
@@ -18,6 +19,13 @@ class Response(BaseModel):
     class_2: str
 
 app = FastAPI()
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 @app.get("/")
 def index():
