@@ -6,13 +6,19 @@ services:
     container_name: backend
     hostname: backend
     build:
-      context: backend
-      dockerfile: Dockerfile
-    command: sh -c "python backend/main.py"
+      context: .
+      dockerfile: backend/Dockerfile
+    command: sh -c "python -m backend.main"
     volumes:
       - ./:/AI-QA-Helper
     ports:
-      - '85:8000'
+      - '85:8005'
+    environment:
+      - NVIDIA_DRIVER_CAPABILITIES=compute,utility
+      - NVIDIA_VISIBLE_DEVICES=all
+    stdin_open: true  # -i flag
+    tty: true         # -t flag
+    runtime: nvidia
 
  bot_ai:
     restart: "no"
