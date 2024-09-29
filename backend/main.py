@@ -29,11 +29,11 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-@app.get("/")
+@app.get("/", summary="Корневая ручка", description="Возвращает приветственное сообщение для пользователя.")
 def index():
     return {"text": "Интеллектуальный помощник оператора службы поддержки."}
 
-@app.post("/predict")
+@app.post("/predict", summary="Предсказание ответа службы поддержки.", description="Принимает запрос с вопросом о системе Rutube и ищет ответ на него в базе знаний. Возвращает ответ на вопрос и 2 классификации вопроса.")
 async def predict_sentiment(request: Request):
     if request.question[-1] != "?":
         request.question += "?"
