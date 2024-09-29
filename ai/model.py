@@ -12,6 +12,9 @@ from dotenv import load_dotenv
 
 model_name_llm = "/AI-QA-Helper/ai/ai_model/"
 
+"""
+load_model - функция, которая загружает модель для бота.
+"""
 def load_model():
     model = AutoModelForCausalLM.from_pretrained(
     model_name_llm,
@@ -37,6 +40,9 @@ def load_model():
 
     return ChatHuggingFace(llm=llm,  tokenizer=tokenizer)
 
+"""
+get_collection - функция, которая возвращает коллекцию для работы с chromadb.
+"""
 def get_collection():
     load_dotenv()
     chroma_client = chromadb.HttpClient(host=str(os.getenv("CHROMA")), port=int(os.getenv("CHROMA_PORT")))
