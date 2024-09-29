@@ -21,6 +21,7 @@ class Response(BaseModel):
     class_2: str
 
 app = FastAPI(
+    root_path="/api",
     servers=[
         {"url": "https://clown-devs.ru/api", "description": "Продовый сервер"},  
     ]
@@ -36,7 +37,7 @@ app.add_middleware(
 """
 index - ручка, которая возвращает приветственное сообщение для пользователя.
 """
-@app.get("/", summary="Корневая ручка", description="Возвращает приветственное сообщение для пользователя.")
+@app.get("/", summary="Корневая ручка.", description="Возвращает приветственное сообщение для пользователя.")
 def index():
     return {"text": "Интеллектуальный помощник оператора службы поддержки."}
 
