@@ -20,7 +20,11 @@ class Response(BaseModel):
     class_1: str
     class_2: str
 
-app = FastAPI()
+app = FastAPI(
+    servers=[
+        {"url": "https://clown-devs.ru/api", "description": "Продовый сервер"},  
+    ]
+)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
