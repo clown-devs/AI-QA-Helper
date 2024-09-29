@@ -84,11 +84,8 @@ docker run -d 'frontend'
 
 ### Database
 
-#### Создание векторизированного датасета
-> python db/main.py
-Создаст db/data директорию с векторным хранилищем
-
-TODO: переписать на клиент-серверное взаимодействие БД (https://docs.trychroma.com/guides)
+#### Запуск векторной базы данных
+> chroma run --path /path/to/data --host 0.0.0.0 
 
 ## Использование
 
