@@ -1,4 +1,5 @@
 import asyncio
+import os
 from fastapi import FastAPI
 from pydantic import BaseModel
 import uvicorn
@@ -7,6 +8,7 @@ from sentence_transformers.util import cos_sim
 import pandas as pd
 from ai.model import Model 
 from fastapi.middleware.cors import CORSMiddleware
+from dotenv import load_dotenv
 
 model = Model()
 
@@ -27,23 +29,35 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-@app.get("/")
+@app.get("/", summary="Корневая ручка", description="Возвращает приветственное сообщение для пользователя.")
 def index():
     return {"text": "Интеллектуальный помощник оператора службы поддержки."}
 
-@app.post("/predict")
+@app.post("/predict", summary="Предсказание ответа службы поддержки.", description="Принимает запрос с вопросом о системе Rutube и ищет ответ на него в базе знаний. Возвращает ответ на вопрос и 2 классификации вопроса.")
 async def predict_sentiment(request: Request):
+    if request.question[-1] != "?":
+        request.question += "?"
+    request.question = request.question[0].upper() + request.question[1:]
+
     answer = model.get_answer(request.question)
+    class_1, class_2 = model.predict_class(request.question)
+    if "не связан с платформой" in answer.lower():
+        answer = "Данный вопрос не связан с платформой RuTube."
+        class_1 = "ОТСУТСТВУЕТ"
+        class_2 = "Отсутствует"
+    answer = answer.replace("Данный вопрос связан с платформой RuTube.", "")    
+    
     response = Response(
         answer=answer,
-        class_1="",
-        class_2=""
+        class_1=class_1,
+        class_2=class_2,
     )
     return response
 
 async def start_server():
-    host = "0.0.0.0" # Сконфигурируйте host согласно настройкам вашего сервера.
-    config = uvicorn.Config(app, host=host, port=8005)
+    load_dotenv()
+
+    config = uvicorn.Config(app, host=str(os.getenv('HOST')), port=int(os.getenv('PORT')))
     server = uvicorn.Server(config)
     await server.serve()
 

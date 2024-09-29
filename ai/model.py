@@ -1,11 +1,14 @@
 import chromadb
 import torch
+import os
 from transformers import AutoModelForCausalLM, AutoTokenizer, pipeline
 from langchain_huggingface import ChatHuggingFace, HuggingFacePipeline
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.runnables import RunnablePassthrough
 from db.embedding import HFEmbeddingFunction
 from langchain_core.output_parsers import StrOutputParser
+from collections import Counter
+from dotenv import load_dotenv
 
 model_name_llm = "/AI-QA-Helper/ai/ai_model/"
 
@@ -25,8 +28,8 @@ def load_model():
     generation_args = {
         "max_new_tokens": 700,
         "return_full_text": False,
-        "temperature": 0.6,
-        "do_sample":True
+        # "temperature": 0.6,
+        "do_sample":False
         #"top_p":0.4,
     }
     pipe = pipeline("text-generation", model=model, tokenizer=tokenizer, **generation_args)
@@ -35,7 +38,8 @@ def load_model():
     return ChatHuggingFace(llm=llm,  tokenizer=tokenizer)
 
 def get_collection():
-    chroma_client = chromadb.HttpClient(host='87.242.119.60', port=8000)
+    load_dotenv()
+    chroma_client = chromadb.HttpClient(host=str(os.getenv("CHROMA")), port=int(os.getenv("CHROMA_PORT")))
 
     emedding_func = HFEmbeddingFunction()
     collection = chroma_client.get_collection(
@@ -51,7 +55,13 @@ class CustomRetriever(BaseRetriever):
         super().__init__(collection=collection)
     def _get_relevant_documents(self, query: str):
         results = self.collection.query(query_texts=[query], n_results=3)  # Пример вызова к источнику данных\
+        
         documents = [Document(page_content=result) for result in results['documents'][0]]
+        print("Query:\n\t", query)
+        print("Ans:")
+        for document in documents:
+            print("\t"+ document.page_content)
+        print("------------------")
         return documents
 
 def create_chain(model, collection):
@@ -93,6 +103,12 @@ class Model():
 
     def get_answer(self, question: str) -> str:
         return invoke_model(self.chain, question)
+
+    def predict_class(self, question: str):
+        query = self.collection.query(query_texts=question, n_results=5)
+        classes_first = [class_first['class1'] for class_first in query['metadatas'][0]]
+        classes_second = [class_second['class2'] for class_second in query['metadatas'][0]]
+        return Counter(classes_first).most_common(1)[0][0], Counter(classes_second).most_common(1)[0][0]
 
 
 
