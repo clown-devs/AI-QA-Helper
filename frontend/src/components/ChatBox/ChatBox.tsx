@@ -27,9 +27,9 @@ const MiniChat: FC<ChatBoxProps> = ({ onBotReply, onBotEdit }) => {
     const userMessage: Message = { text: input, sender: 'user' };
     setMessages([...messages, userMessage]);
     setInput('');
-    
+
     try {
-      const response = await axios.post('http://87.242.119.60:85/predict', {
+      const response = await axios.post('https://clown-devs.ru/api/predict', {
         question: input,
       });
 
