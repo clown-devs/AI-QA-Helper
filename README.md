@@ -1,7 +1,8 @@
 # AI-QA-Helper
-TODO: оформить документацию, почистить репу (удалить baseline/embeddings)
 
-Бот, созданный в рамках хакатона, нужен для *БЛА-БЛА-БЛА*
+Интеллектуальный помощник оператора службы поддержки RuTube, который умеет генерировать ответы на основе базы знаний и классифицировать их.
+
+Проект представляет собой тг-бота и web приложение, где оператор службы поддержки будет взаимодействовать с помощником. Модель обработает вопрос, сгенерирует ответ и произведет классификацию принадлежности вопроса бизнес логики процесса по уровню.
 
 ## Получение репозитория
 ```bash
@@ -30,6 +31,16 @@ sudo chmod o+rx ~/AI-QA-Helper/frontend/fullchain.pem
 sudo chmod o+rx ~/AI-QA-Helper/frontend/privkey.pem
 ```
 
+Создайте файл *.env* со следующей информацией в корне проекта:
+```
+CHROMA = "<your_db_host>"
+CHROMA_PORT = "<your_db_port>"
+HOST = "<your_api_host>"
+PORT = "<your_api_port>"
+TOKEN = "<your_bot_token>"
+API = "<your_api_host>"
+```
+
 ## Docker
 ### Запуск всех контейнеров
 Чтобы backend запустился корректно, необходимо выполнить следующие действия:
@@ -46,46 +57,37 @@ sudo apt-get install -y nvidia-docker2
 sudo pkill -SIGHUP dockerd
 ```
 
-Запускаем контейнеры:
+Запускаем все контейнеры (bot, frontend, backend. db):
 ```bash
 cd AI-QA-Helper
-docker compose up -d
+docker compose up -d --build
 ```
 ### Отдельный запуск
-#### bot
+#### Bot
 ```bash
 cd AI-QA-Helper/bot
 docker build -t 'bot'
 docker run -d 'bot'
 ```
-#### backend
+#### Backend
 ```bash
 cd AI-QA-Helper/backend
 docker build -t 'backend'
 docker run -d 'backend'
 ```
-### frontend
+### Frontend
 ```bash
 cd AI-QA-Helper/frontend
 docker build -t 'frontend'
 docker run -d 'frontend'
 ```
 
-
-## Ручной запуск
-
-### backend
-
-#### Установка зависимостей
-> pip install -r requirements.txt
-
-#### Запуск сервера
-> python main.py
-
 ### Database
-
-#### Запуск векторной базы данных
-> chroma run --path /path/to/data --host 0.0.0.0 
+```bash
+cd AI-QA-Helper/db
+docker build -t 'db'
+docker run -d 'db'
+```
 
 ## Использование
 
