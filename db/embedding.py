@@ -1,5 +1,8 @@
 from chromadb import Documents, EmbeddingFunction, Embeddings
 
+"""
+HFEmbeddingFunction - это класс, который используется для создания эмбеддингов текста с помощью HuggingFace модели.
+"""
 class HFEmbeddingFunction(EmbeddingFunction):
     def __init__(self):
         from langchain_community.embeddings import HuggingFaceEmbeddings

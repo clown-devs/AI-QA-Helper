@@ -3,8 +3,13 @@ from chromadb import Documents, EmbeddingFunction, Embeddings
 from embedding import HFEmbeddingFunction
 import pandas as pd
 
-# get_samples функция для получения сэмплов вопросов-ответов
-# возвращает 3 массива: конкатенированные вопрос-ответы, классификатор1 и классификатор2
+# Данный скрипт заполняет базу данных ответами из базы знаний и реальных кейсов использования
+
+
+"""
+get_samples - функция для получения сэмплов вопросов-ответов
+возвращает 3 массива: конкатенированные вопрос-ответы, классификатор1 и классификатор2
+"""
 def get_samples():
     # Считываем базу знаний
     knowledge_base = pd.read_excel('baseline/rag/01_База_знаний.xlsx')
@@ -25,15 +30,26 @@ def get_samples():
         best_faq[['question', 'answer', 'class1', 'class2']]
 
     ])
+
+    # Удаляем дубликаты (в датасете присутствуют!)
     data = data.drop_duplicates(subset=data.columns).to_dict(orient='records')
     return get_docs(data)
 
+"""
+get_docs - функция для получения документов из сэмплов
+принимает на вход массив сэмплов
+возвращает 3 массива: конкатенированные вопрос-ответы, классификатор1 и классификатор2
+"""
 def get_docs(data):
     documents = [f"Вопрос: {item['question']} Ответ: {item['answer']}" for item in data]
     class1 = [item['class1'] for item in data]
     class2 = [item['class2'] for item in data]
     return documents, class1, class2
     
+"""
+add_docs_to_collection - функция для добавления документов в коллекцию
+принимает на вход 3 массива: конкатенированные вопрос-ответы, классификатор1 и классификатор2
+"""
 def add_docs_to_collection(documents, class1, class2, collection):
     for i in range(len(documents)):
         # Генерация уникального ID для каждого документа
@@ -53,21 +69,18 @@ def add_docs_to_collection(documents, class1, class2, collection):
     print("Documents added to collection")
 
 
-
-emedding_func = HFEmbeddingFunction()
-chroma_client = chromadb.HttpClient(host='87.242.119.60', port=8000)
-chroma_client.delete_collection(name="rutube")
-collection = chroma_client.get_or_create_collection(
-    name="rutube", 
-    embedding_function=emedding_func, 
-    metadata={"hnsw:space": "cosine"}
-)
-
-print("Collection count:", collection.count())
-
-documents, class1, class2 = get_samples()
-add_docs_to_collection(documents, class1, class2,  collection)
-print("Collection count:", collection.count())
+if __name__ == "__main__":
+    emedding_func = HFEmbeddingFunction()
+    chroma_client = chromadb.HttpClient(host='87.242.119.60', port=8000)
+    #chroma_client.delete_collection(name="rutube")
+    collection = chroma_client.get_or_create_collection(
+        name="rutube", 
+        embedding_function=emedding_func, 
+        metadata={"hnsw:space": "cosine"}
+    )
+    documents, class1, class2 = get_samples()
+    add_docs_to_collection(documents, class1, class2,  collection)
+    print("Collection count:", collection.count())
 
 
 

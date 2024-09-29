@@ -12,6 +12,9 @@ from dotenv import load_dotenv
 
 model_name_llm = "/AI-QA-Helper/ai/ai_model/"
 
+"""
+load_model - функция, которая загружает модель для бота.
+"""
 def load_model():
     model = AutoModelForCausalLM.from_pretrained(
     model_name_llm,
@@ -37,6 +40,9 @@ def load_model():
 
     return ChatHuggingFace(llm=llm,  tokenizer=tokenizer)
 
+"""
+get_collection - функция, которая возвращает коллекцию для работы с chromadb.
+"""
 def get_collection():
     load_dotenv()
     chroma_client = chromadb.HttpClient(host=str(os.getenv("CHROMA")), port=int(os.getenv("CHROMA_PORT")))
@@ -49,6 +55,10 @@ def get_collection():
     return collection
 
 from langchain.schema import BaseRetriever, Document
+"""
+CustomRetriever - класс, который использует chromadb для поиска документов по запросу.
+Используется для создания цепочки для бота.
+"""
 class CustomRetriever(BaseRetriever):
     collection: chromadb.Collection
     def __init__(self, collection):
@@ -63,7 +73,10 @@ class CustomRetriever(BaseRetriever):
             print("\t"+ document.page_content)
         print("------------------")
         return documents
-
+    
+"""
+create_chain - функция, которая создает RAG цепочку для бота.
+"""
 def create_chain(model, collection):
     prompt = ChatPromptTemplate.from_messages(
         [
@@ -91,10 +104,16 @@ def create_chain(model, collection):
     )   
     return rag_chain
 
+"""
+invoke_model - функция, которая вызывает модель для ответа на вопрос.
+"""
 def invoke_model(chain, query):
     response = chain.invoke(query)
     return response
 
+"""
+Model - класс, который используется для работы с моделью предсказания ответов на вопросы.
+"""
 class Model():
     def __init__(self):
         self.chat_model = load_model()
