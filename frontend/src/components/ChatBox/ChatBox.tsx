@@ -18,7 +18,7 @@ const MiniChat: FC<ChatBoxProps> = ({ onBotReply, onBotEdit }) => {
   const [isChatOpen, setChatOpen] = useState<boolean>(false);
 
   const toggleChat = () => {
-    setChatOpen((prevState) => !prevState); // Переключение состояния окна чата
+    setChatOpen((prevState) => !prevState);
   };
 
   const sendMessage = async () => {
@@ -125,6 +125,12 @@ const MiniChat: FC<ChatBoxProps> = ({ onBotReply, onBotEdit }) => {
                 ))}
             </div>
             <div className={styles.inputContainer}>
+              <div className={styles.buttonContainer}>
+                <button onClick={sendMessageFromUser}>
+                  Отправить пользователю
+                </button>
+                <button onClick={editMessageFromUser}>Изменить</button>
+              </div>
               <input
                 type="text"
                 value={input}
@@ -132,11 +138,6 @@ const MiniChat: FC<ChatBoxProps> = ({ onBotReply, onBotEdit }) => {
                 placeholder="Type your message..."
                 onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
               />
-              {/* <button onClick={sendMessage}>Send</button> */}
-              <button onClick={sendMessageFromUser}>
-                Отправить пользователю
-              </button>
-              <button onClick={editMessageFromUser}>Изменить</button>
             </div>
           </div>
         </div>
