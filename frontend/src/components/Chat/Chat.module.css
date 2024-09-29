@@ -1,5 +1,5 @@
 .chatContainer {
-  width: 500px;
+  width: 400px;
   height: 100%;
   background-color: #f9f9f9;
   border: 1px solid #ccc;
@@ -9,10 +9,12 @@
 }
 
 .header {
-  background-color: #e7e7e7;
-  padding: 10px;
-  text-align: center;
-  font-weight: bold;
+  background-color: #3b82f6;
+  padding: 16px;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   border-bottom: 1px solid #ccc;
   border-top-left-radius: 8px;
   border-top-right-radius: 8px;
@@ -79,4 +81,51 @@
   justify-content: center;
   border: 3px solid #e6e6e6;
   border-radius: 40px;
+}
+
+/* MessageInput.module.css */
+
+.container {
+  background-color: white;
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+}
+
+.input {
+  flex: 1;
+  border: 1px solid #ccc;
+  border-radius: 9999px;
+  padding: 0.5rem 1rem;
+  outline: none;
+  transition: border-color 0.2s ease-in-out;
+}
+
+.input:focus {
+  border-color: #3b82f6;
+}
+
+.button {
+  background-color: #3b82f6;
+  color: white;
+  border-radius: 9999px;
+  padding: 0.5rem;
+  margin-left: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+  border: none;
+  outline: none;
+}
+
+.button:hover {
+  background-color: #2563eb;
+}
+
+.button:focus {
+  outline: none;
 }
